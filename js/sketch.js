@@ -26,6 +26,7 @@ let markerY = 0;
 let greenery = [];
 let isBlinking = false; // Voor knipperend effect
 let blinkTimer = 0;
+let x = 1.5
 
 // Afbeeldingen
 let playerCar;
@@ -86,6 +87,8 @@ function initialiseGame() {
 function draw() {
     if (scene == 1) {
         background(50);
+        
+
         fill(255);
         textAlign(CENTER);
         text("Welcome to Ghost Rider!", width / 2, height / 2 - 50);
@@ -119,25 +122,63 @@ function drawSelectionMenu() {
     for (let i = 0; i < playerCarOptions.length; i++) {
         let x = width / 2 + (i - 1) * 170;
         let y = height / 2.5;
-        let carWidth = i === selectedCar ? 130 : 100;
-        let carHeight = i === selectedCar ? 260 : 200;
+        let carWidth = 100;
+        let carHeight = 200;
+        
+        // Controleer of de muis over de auto beweegt
+        if (
+            mouseX > x - carWidth / 2 &&
+            mouseX < x + carWidth / 2 &&
+            mouseY > y - carHeight / 2 &&
+            mouseY < y + carHeight / 2
+        ) {
+            carWidth = 130;
+            carHeight = 260;
+        }
+        
+        // Geef geselecteerde auto een rand
         if (i === selectedCar) {
             stroke(255, 255, 0);
             strokeWeight(4);
+            carWidth = 130;
+            carHeight = 260;
         } else {
             noStroke();
         }
+        
         image(playerCarOptions[i], x - carWidth / 2, y - carHeight / 2, carWidth, carHeight);
     }
 
     noStroke();
     textSize(16);
-    text("Use arrow keys to choose", width / 2, height / 2 + 150);
+    text("Click on a car to select", width / 2, height / 2 + 150);
     text("Press ENTER to confirm", width / 2, height / 2 + 180);
+}
+
+function mousePressed() {
+    if (scene === 2) {
+        for (let i = 0; i < playerCarOptions.length; i++) {
+            let x = width / 2 + (i - 1) * 170;
+            let y = height / 2.5;
+            let carWidth = 130;
+            let carHeight = 260;
+            
+            if (
+                mouseX > x - carWidth / 2 &&
+                mouseX < x + carWidth / 2 &&
+                mouseY > y - carHeight / 2 &&
+                mouseY < y + carHeight / 2
+            ) {
+                selectedCar = i;
+                break;
+            }
+        }
+    }
 }
 
 function playGame() {
     background(160, 190, 110); // Lichtgroene achtergrond
+
 
     // Teken weg
     fill(55);
